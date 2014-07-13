@@ -11,7 +11,8 @@
     - role: ansible-redis-development
       with_redmon: False
     - role: ansible-nodejs
-    - role: ansible-nodejs-bootstrap
+    - role: ansible-nodejs-apps
       # apps:
       #   enabled:
-      #     - "/srv/nodecellar-react/"
+      #     - "/srv/myapp/"
+      #     - "/srv/anotherapp/"

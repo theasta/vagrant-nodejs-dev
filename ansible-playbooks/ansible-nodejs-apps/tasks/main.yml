@@ -1,8 +1,8 @@
 - name: Install forever package globally
-  npm: name=forever global=yes state=latest
+  npm: name=forever global=yes state=present
 
-- name: Install npm packages
-  npm: name={{item}} global=yes state=latest
+- name: Install npm global packages
+  npm: name={{item}} global=yes state=present
   with_items: npm.global_packages
   when: npm.global_packages
 
@@ -11,7 +11,19 @@
   register: forever_list
   changed_when: False
 
-- name: Install packages based on package.json
+- stat: path=/vagrant/package.json
+  register: vagpack
+
+- name: Run npm install in /vagrant folder
+  npm: path=/vagrant
+  when: vagpack.stat.exists
+
+- name: Start app in /vagrant/ folder
+  command: forever start -c "npm start" /vagrant/
+  when: "forever_list.stdout.find('/vagrant/') == -1"
+  when: vagpack.stat.exists
+
+- name: Run npm install in folders listed in apps.enabled
   npm: path={{ item }}
   with_items: apps.enabled
   when: apps is defined and apps.enabled is defined

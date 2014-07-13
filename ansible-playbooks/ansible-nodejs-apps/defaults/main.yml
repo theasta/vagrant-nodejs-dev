@@ -2,4 +2,3 @@
 npm:
   global_packages:
     - grunt-cli
-    
