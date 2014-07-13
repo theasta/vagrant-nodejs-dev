@@ -1,0 +1,17 @@
+---
+- command: apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+
+- name: add mongodb repo
+  apt_repository:
+    repo: "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen"
+    state: present
+
+- name: install mongodb
+  apt:
+    pkg: "mongodb-10gen={{ mongo_version }}"
+    state: present
+
+- name: ensure mongodb is running
+  service:
+    name: mongodb
+    state: started

@@ -1,0 +1,12 @@
+---
+- name: Install packages
+  action: apt pkg={{item}} state=latest update-cache=yes
+  with_items:
+  - pkg-config
+  - build-essential
+  - git-core
+  - vim
+  - curl
+  - wget
+  - tree
+

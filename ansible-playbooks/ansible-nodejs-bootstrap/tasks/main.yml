@@ -1,0 +1,23 @@
+- name: Install forever package globally
+  npm: name=forever global=yes state=latest
+
+- name: Install npm packages
+  npm: name={{item}} global=yes state=latest
+  with_items: npm.global_packages
+  when: npm.global_packages
+
+- name: Check list of Node.js apps running
+  command: forever list
+  register: forever_list
+  changed_when: False
+
+- name: Install packages based on package.json
+  npm: path={{ item }}
+  with_items: apps.enabled
+  when: apps is defined and apps.enabled is defined
+
+- name: Start all enabled applications
+  command: forever start -c "npm start" {{ item }}
+  when: "forever_list.stdout.find('{{ item }}') == -1"
+  with_items: apps.enabled
+  when: apps is defined and apps.enabled is defined

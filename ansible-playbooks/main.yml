@@ -1,0 +1,17 @@
+---
+- hosts: all
+  user: vagrant
+  sudo: true
+  sudo_user: root
+
+  roles:
+    - role: ansible-nginx
+    - role: ansible-softwares
+    - role: ansible-mongodb
+    - role: ansible-redis-development
+      with_redmon: False
+    - role: ansible-nodejs
+    - role: ansible-nodejs-bootstrap
+      # apps:
+      #   enabled:
+      #     - "/srv/nodecellar-react/"

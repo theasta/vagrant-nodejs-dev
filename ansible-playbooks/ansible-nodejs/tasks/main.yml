@@ -1,0 +1,14 @@
+---
+- name: Package prerequisites for node.js
+  action: apt pkg=python-software-properties state=installed update-cache=yes
+
+- name: Add the node.js PPA for precise
+  action: command add-apt-repository -y ppa:chris-lea/node.js creates=/etc/apt/sources.list.d/chris-lea-node_js-precise.list
+  when: ansible_distribution_release == 'precise'
+
+- name: Add the node.js PPA for lucid
+  action: command add-apt-repository ppa:chris-lea/node.js
+  when: ansible_distribution_release == 'lucid'
+
+- name: Install nodejs and npm
+  action: apt pkg=nodejs state=installed update-cache=yes
