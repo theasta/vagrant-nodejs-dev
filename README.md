@@ -1,12 +1,13 @@
 # vagrant-nodejs-dev
 
-An ansible-based vagrant environment to develop server-side nodejs application with MongoDB, Redis and Nginx roles.
+An ansible-based vagrant environment for kick-starting server-side nodejs application development with MongoDB, Redis and Nginx.
 
 ## Usage
 
 ```
 git clone https://github.com/theasta/vagrant-nodejs-dev.git
 cd vagrant-nodejs-dev
+ansible-galaxy install DavidWittman.redis
 vagrant up
 ```
 
@@ -15,18 +16,14 @@ Once it's done, you can ssh inside the vm by running `vagrant ssh`
 
 ## Firing nodejs server-side applications
 
-It comes with an ansible-nodejs-apps role that will help you to fire your nodejs applications as you `vagrant up`.
-
-There are two different ways to get your app(s) running on the virtual machine.
+The ansible-nodejs-apps role will help you to fire your nodejs applications as you `vagrant up`.
 
 ### Prerequisites
 
 1. A package.json file that should be located at the root of the app repo.
-2. If ever you are not using server.js as your primary file, you should update the "script" object with the proper information in package.json
+2. A server.js file
 
-```
-"scripts": {"start": "node myApp.js"}
-```
+Then you have two different ways to get your app(s) running on the virtual machine to choose from.
 
 ### I - Put your source code alongside the Vagrantfile and ansible-playbooks
 
@@ -39,11 +36,10 @@ Note that this port has been defined in the Vagrantfile and you can modify it ma
 
 ### II - Symlink your applications
 
-You can create a vagrant sync folder that links to your local working directory.  This way, any changes you make locally is also on the vm right away.
-
 This configuration has the tremendous advantage of letting you have multiple apps running on a single virtual machine (as long as they are using different ports).
 
-Add this line in the Vagrantfile:
+All you have to do is to create a vagrant sync folder for each app you want to include.
+Add those lines in the Vagrantfile:
 
 ```
   config.vm.synced_folder "/local/path/to/myapp", "/srv/myapp"
@@ -60,4 +56,4 @@ Now you need to list the apps you want to enable by listing them in ansible-play
         - "/srv/anotherapp/"
 ```
 
-Then `vagrant reload --provision` and you're all good.
+Then `vagrant reload --provision` and you're all set.
